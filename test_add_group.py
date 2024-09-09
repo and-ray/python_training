@@ -10,7 +10,6 @@ class TestAddGroup(unittest.TestCase):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
 
-
     def create_group(self, wd, group):
         #init group creation
         wd.find_element_by_name("new").click()
@@ -26,7 +25,6 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("group_footer").send_keys(group.footer)
         # submit group creation
         wd.find_element_by_name("submit").click()
-
 
     def open_group_page(self, wd):
         wd.find_element_by_link_text("groups").click()
