@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium.webdriver.common.by import By
 
 
@@ -21,34 +23,45 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
+    def return_to_home_page(self):
+        wd = self.app.wd
+        if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) >0):
+            wd.find_element_by_link_text("home").click()
+
 
     def create(self, contact):
         wd = self.app.wd
-        wd.find_element_by_link_text("add new").click()
+        self.open_contact_creation_page()
         self.fill_first_contact(contact)
         wd.find_element_by_name("submit").click()
-        self.app.return_to_home_page()
+        self.return_to_home_page()
+
+    def open_contact_creation_page(self):
+        wd = self.app.wd
+        if not (len(wd.find_elements_by_name("firstname")) >0 and len(wd.find_elements_by_name("middlename"))>0 and len(wd.find_elements_by_name("lastname"))>0 and len(wd.find_elements_by_name("submit")) ==2 ):
+            sleep(5) # CONTACT TESTS DO NOT WORK WITHOUT THIS SLOW BUTTON
+            wd.find_element_by_link_text("add new").click()
 
     def delete_first_contact(self):
         wd = self.app.wd
-        self.app.return_to_home_page()
+        self.return_to_home_page()
         # select
         wd.find_element_by_name("selected[]").click()
         # exterminate
         wd.find_element(By.XPATH, "//input[@value='Delete']").click()
-        self.app.return_to_home_page()
+        self.return_to_home_page()
 
     def modify_first(self, contact):
         wd = self.app.wd
-        self.app.return_to_home_page()
+        self.return_to_home_page()
         # select
         wd.find_element(By.XPATH, "//img[@title='Edit']").click()
         #edit
         self.fill_first_contact(contact)
         wd.find_element_by_name("update").click()
-        self.app.return_to_home_page()
+        self.return_to_home_page()
 
     def count(self):
         wd = self.app.wd
-        self.app.return_to_home_page()
+        self.return_to_home_page()
         return len (wd.find_elements_by_name("selected[]"))
