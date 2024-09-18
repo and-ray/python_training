@@ -1,7 +1,6 @@
 from time import sleep
-
 from selenium.webdriver.common.by import By
-
+from model.contact import Contact
 
 class ContactHelper:
     def __init__(self, app):
@@ -65,3 +64,18 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         return len (wd.find_elements_by_name("selected[]"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        self.return_to_home_page()
+        contact_list = []
+        #full_list = wd.find_elements_by_xpath("//table[@id='maintable']//tr[@name]")
+        for each_element in  wd.find_elements_by_xpath("//table[@id='maintable']//tr[@name]"):
+            last_name = each_element.find_element_by_xpath("td[2]").text
+            first_name = each_element.find_element_by_xpath("td[3]").text
+            #email = each_element.text
+            #home_phone = each_element.text
+            id_line = str(each_element.find_element_by_xpath("td[@class]/a").get_attribute("href")) #view.php?id=69
+            id = id_line[len(id_line)-2:len(id_line)] #view.php?id=69
+            contact_list.append(Contact(last_name=last_name, first_name=first_name, id=id))
+        return contact_list
