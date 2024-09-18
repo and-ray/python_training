@@ -42,26 +42,32 @@ class ContactHelper:
             sleep(5) # CONTACT TESTS DO NOT WORK WITHOUT THIS SLOW BUTTON
             wd.find_element_by_link_text("add new").click()
 
-    def delete_first_contact(self):
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
         self.return_to_home_page()
         # select
-        wd.find_element_by_name("selected[]").click()
+        wd.find_elements_by_name("selected[]")[index].click()
         # exterminate
         wd.find_element(By.XPATH, "//input[@value='Delete']").click()
         self.return_to_home_page()
         self.contact_list_cache = None
 
-    def modify_first(self, contact):
+    def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def modify_by_index(self, contact, index):
         wd = self.app.wd
         self.return_to_home_page()
         # select
-        wd.find_element(By.XPATH, "//img[@title='Edit']").click()
+        wd.find_elements(By.XPATH, "//img[@title='Edit']")[index].click()
         #edit
         self.fill_first_contact(contact)
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
         self.contact_list_cache = None
+
+    def modify_first(self, contact):
+        self.modify_by_index(contact, 0)
 
     def count(self):
         wd = self.app.wd
