@@ -86,7 +86,7 @@ class ContactHelper:
                 first_name = each_element.find_element_by_xpath("td[3]").text
                 #email = each_element.text
                 #home_phone = each_element.text
-                id_line = str(each_element.find_element_by_xpath("td[@class]/a").get_attribute("href")) #view.php?id=69
-                id = id_line[len(id_line)-2:len(id_line)]
+                id_line = str(each_element.find_element_by_xpath("td[@class]/a").get_attribute("href"))
+                id = id_line.removeprefix("https://localhost/addressbook/view.php?id=")
                 self.contact_list_cache.append(Contact(last_name=last_name, first_name=first_name, id=id))
        return list(self.contact_list_cache)
