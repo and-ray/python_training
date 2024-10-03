@@ -1,6 +1,7 @@
 from time import sleep
 from selenium.webdriver.common.by import By
 from model.contact import Contact
+import re
 
 class ContactHelper:
     def __init__(self, app):
@@ -12,6 +13,9 @@ class ContactHelper:
         self.change_field_value("middlename", contact.middle_name)
         self.change_field_value("lastname", contact.last_name)
         self.change_field_value("home", contact.home_phone)
+        self.change_field_value("mobile", contact.mobile_phone)
+        self.change_field_value("work", contact.work_phone)
+        #self.change_field_value("fax", contact.secondary_phone)
         self.change_field_value("email", contact.email)
 
 
@@ -38,7 +42,8 @@ class ContactHelper:
 
     def open_contact_creation_page(self):
         wd = self.app.wd
-        if not (len(wd.find_elements_by_name("firstname")) >0 and len(wd.find_elements_by_name("middlename"))>0 and len(wd.find_elements_by_name("lastname"))>0 and len(wd.find_elements_by_name("submit")) ==2 ):
+        if not (len(wd.find_elements_by_name("firstname")) >0 and len(wd.find_elements_by_name("middlename"))>0 and
+                len(wd.find_elements_by_name("lastname"))>0 and len(wd.find_elements_by_name("submit")) ==2 ):
             sleep(5) # CONTACT TESTS DO NOT WORK WITHOUT THIS SLOW BUTTON
             wd.find_element_by_link_text("add new").click()
 
@@ -84,8 +89,58 @@ class ContactHelper:
             for each_element in  wd.find_elements_by_xpath("//table[@id='maintable']//tr[@name]"):
                 last_name = each_element.find_element_by_xpath("td[2]").text
                 first_name = each_element.find_element_by_xpath("td[3]").text
-                #email = each_element.text
-                #home_phone = each_element.text
                 id = str(each_element.find_element_by_xpath("td/input").get_attribute("id"))
-                self.contact_list_cache.append(Contact(last_name=last_name, first_name=first_name, id=id))
+                address = each_element.find_element_by_xpath("td[4]").text
+                all_emails = each_element.find_element_by_xpath("td[5]").text
+                all_phones = each_element.find_element_by_xpath("td[6]").text
+                self.contact_list_cache.append(Contact(last_name=last_name,
+                                                       first_name=first_name,
+                                                       id=id,
+                                                       address=address,
+                                                       all_phones_from_home_page=all_phones,
+                                                       all_emails_from_home_page = all_emails
+                                                       ))
        return list(self.contact_list_cache)
+
+    def get_contact_from_view_page(self,index):
+        wd = self.app.wd
+        self.open_contact_view_by_index(index)
+        all_phones_field = wd.find_element_by_id("content").text
+        home_phone = re.search("H: (.*)", all_phones_field).group(1)
+        mobile_phone = re.search("M: (.*)", all_phones_field).group(1)
+        work_phone = re.search("W: (.*)", all_phones_field).group(1)
+        return Contact(home_phone=home_phone, mobile_phone=mobile_phone, work_phone=work_phone)
+
+
+    def open_contact_view_by_index(self, index):
+        wd = self.app.wd
+        self.return_to_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[6]
+        cell.find_element_by_tag_name("a").click()
+
+    def open_contact_to_edit_by_index(self, index):
+        wd = self.app.wd
+        self.return_to_home_page()
+        row = wd.find_elements_by_name("entry")[index]
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
+    def get_contact_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_contact_to_edit_by_index(index)
+        first_name = wd.find_element_by_name("firstname").get_attribute("value")
+        last_name = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        home_phone = wd.find_element_by_name("home").get_attribute("value")
+        mobile_phone = wd.find_element_by_name("mobile").get_attribute("value")
+        work_phone = wd.find_element_by_name("work").get_attribute("value")
+        email1 = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
+        return(Contact(last_name=last_name, first_name=first_name, id=id, home_phone=home_phone,
+                       mobile_phone=mobile_phone, work_phone=work_phone,
+                       email1=email1, email2=email2, email3=email3, address=address))
+
+
