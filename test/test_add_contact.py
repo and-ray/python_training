@@ -5,7 +5,7 @@ import random
 import string
 
 def random_string (prefix, maxlen):
-    symbols = string.ascii_letters + " "*10 + string.digits
+    symbols = string.ascii_letters + " " + string.digits
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 def random_digits (prefix, maxlen):
@@ -21,9 +21,9 @@ def random_email (prefix):
 testData = [
 Contact(first_name=first_name, middle_name=middle_name, last_name=last_name,
         home_phone=home_phone,work_phone=work_phone, mobile_phone=mobile_phone, email1=email1)
-    for first_name in [random_string("first_name", 10)]
+    for first_name in ["", random_string("first_name", 10)]
     for middle_name in [random_string("middle_name", 20)]
-    for last_name in [random_string("last_name", 20)]
+    for last_name in ["", random_string("last_name", 20)]
     for home_phone in [random_digits("home_phone", 20)]
     for work_phone in [random_digits("work_phone", 20)]
     for mobile_phone in [random_digits("mobile_phone", 20)]
