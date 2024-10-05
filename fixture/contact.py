@@ -15,8 +15,10 @@ class ContactHelper:
         self.change_field_value("home", contact.home_phone)
         self.change_field_value("mobile", contact.mobile_phone)
         self.change_field_value("work", contact.work_phone)
-        #self.change_field_value("fax", contact.secondary_phone)
-        self.change_field_value("email", contact.email)
+        self.change_field_value("email", contact.email1)
+        self.change_field_value("email2", contact.email2)
+        self.change_field_value("email3", contact.email3)
+        self.change_field_value("address", contact.address)
 
 
     def change_field_value(self, field_name, text):
