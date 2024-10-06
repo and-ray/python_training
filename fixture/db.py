@@ -28,7 +28,7 @@ class DbFixture:
         contact_list=[]
         cursor = self.connection.cursor()
         try:
-            cursor.execute("select id, firstname, lastname, home, mobile, work, email1 from addressbook")
+            cursor.execute("select id, firstname, lastname, home, mobile, work, email from addressbook")
             for row in cursor:
                 (id, firstname, lastname, home, mobile, work, email1) = row
                 contact_list.append(Contact(id=str(id), first_name=firstname, last_name=lastname,
