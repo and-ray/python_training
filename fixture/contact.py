@@ -59,6 +59,17 @@ class ContactHelper:
         self.return_to_home_page()
         self.contact_list_cache = None
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        self.return_to_home_page()
+        # select
+        wd.find_element_by_css_selector("input[value='%s']" %id).click()
+        # exterminate
+        wd.find_element(By.XPATH, "//input[@value='Delete']").click()
+        self.return_to_home_page()
+        self.contact_list_cache = None
+
+
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
 
