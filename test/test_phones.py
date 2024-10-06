@@ -21,14 +21,14 @@ def  merge_phones_like_on_home_page(contact):
                                                    filter(lambda x: x is not None,
                                                           [contact.home_phone,
                                                            contact.mobile_phone,
-                                                           contact.work_phone]))))
+                                                           contact.work_phone])))).replace(" ", "")
 
 def merge_emails_like_on_home_page(contact):
     return "\n".join(filter(lambda x: x != "", map(lambda x: clear(x),
                                                    filter(lambda x: x is not None,
                                                           [contact.email1,
                                                            contact.email2,
-                                                           contact.email3]))))
+                                                           contact.email3])))).replace(" ", "")
 
 def test_contacts_on_main_and_edit_page(app):
     contacts_from_home_page = app.contact.get_contact_list()

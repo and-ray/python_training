@@ -93,8 +93,8 @@ class ContactHelper:
                 first_name = each_element.find_element_by_xpath("td[3]").text
                 id = str(each_element.find_element_by_xpath("td/input").get_attribute("id"))
                 address = each_element.find_element_by_xpath("td[4]").text
-                all_emails = each_element.find_element_by_xpath("td[5]").text
-                all_phones = each_element.find_element_by_xpath("td[6]").text
+                all_emails = each_element.find_element_by_xpath("td[5]").text.replace(" ", "")
+                all_phones = each_element.find_element_by_xpath("td[6]").text.replace(" ", "")
                 self.contact_list_cache.append(Contact(last_name=last_name,
                                                        first_name=first_name,
                                                        id=id,
@@ -134,9 +134,9 @@ class ContactHelper:
         first_name = wd.find_element_by_name("firstname").get_attribute("value")
         last_name = wd.find_element_by_name("lastname").get_attribute("value")
         id = wd.find_element_by_name("id").get_attribute("value")
-        home_phone = wd.find_element_by_name("home").get_attribute("value")
-        mobile_phone = wd.find_element_by_name("mobile").get_attribute("value")
-        work_phone = wd.find_element_by_name("work").get_attribute("value")
+        home_phone = " ".join(wd.find_element_by_name("home").get_attribute("value").split())
+        mobile_phone = " ".join(wd.find_element_by_name("mobile").get_attribute("value").split())
+        work_phone = " ".join(wd.find_element_by_name("work").get_attribute("value").split())
         email1 = wd.find_element_by_name("email").get_attribute("value")
         email2 = wd.find_element_by_name("email2").get_attribute("value")
         email3 = wd.find_element_by_name("email3").get_attribute("value")
