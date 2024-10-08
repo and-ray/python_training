@@ -57,6 +57,7 @@ class ORMFixture:
         return self.convert_contacts_to_model(orm_groups.contacts)
 
     def get_first_group_fom_db(self, group):
+        temp_group = group
         orm_groups = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
         return orm_groups
 

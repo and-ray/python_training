@@ -2,13 +2,13 @@ from time import sleep
 from selenium.webdriver.common.by import By
 from model.contact import Contact
 import re
+from selenium.webdriver.support.ui import Select
 
 class ContactHelper:
     def __init__(self, app):
         self.app = app
 
     def fill_first_contact(self, contact):
-        wd = self.app.wd
         self.change_field_value("firstname", contact.first_name)
         self.change_field_value("middlename", contact.middle_name)
         self.change_field_value("lastname", contact.last_name)
@@ -20,6 +20,10 @@ class ContactHelper:
         self.change_field_value("email3", contact.email3)
         self.change_field_value("address", contact.address)
 
+    def fill_first_contact_with_group(self, contact, group):
+        wd = self.app.wd
+        self.fill_first_contact(contact)
+        Select(wd.find_element_by_name("new_group")).select_by_visible_text(group.name)
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -33,11 +37,18 @@ class ContactHelper:
         if not (wd.current_url.endswith("/addressbook/") and len(wd.find_elements_by_name("searchstring")) >0):
             wd.find_element_by_link_text("home").click()
 
-
     def create(self, contact):
         wd = self.app.wd
         self.open_contact_creation_page()
         self.fill_first_contact(contact)
+        wd.find_element_by_name("submit").click()
+        self.return_to_home_page()
+        self.contact_list_cache = None
+
+    def create_with_group(self, contact, group):
+        wd = self.app.wd
+        self.open_contact_creation_page()
+        self.fill_first_contact_with_group(contact, group)
         wd.find_element_by_name("submit").click()
         self.return_to_home_page()
         self.contact_list_cache = None
@@ -99,7 +110,7 @@ class ContactHelper:
             wd = self.app.wd
             self.return_to_home_page()
             self.contact_list_cache = []
-            for each_element in  wd.find_elements_by_xpath("//table[@id='maintable']//tr[@name]"):
+            for each_element in wd.find_elements_by_xpath("//table[@id='maintable']//tr[@name]"):
                 last_name = each_element.find_element_by_xpath("td[2]").text
                 first_name = each_element.find_element_by_xpath("td[3]").text
                 id = str(each_element.find_element_by_xpath("td/input").get_attribute("id"))
@@ -123,7 +134,6 @@ class ContactHelper:
         mobile_phone = re.search("M: (.*)", all_phones_field).group(1)
         work_phone = re.search("W: (.*)", all_phones_field).group(1)
         return Contact(home_phone=home_phone, mobile_phone=mobile_phone, work_phone=work_phone)
-
 
     def open_contact_view_by_index(self, index):
         wd = self.app.wd
@@ -156,4 +166,10 @@ class ContactHelper:
                        mobile_phone=mobile_phone, work_phone=work_phone,
                        email1=email1, email2=email2, email3=email3, address=address))
 
+    def select_contact_to_delete_from_group(self, contact):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//input[@id='%s']" %contact.id).click()
 
+    def delete_contact_from_group(self):
+        wd = self.app.wd
+        wd.find_element_by_name("remove").click()

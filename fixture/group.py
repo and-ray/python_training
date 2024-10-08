@@ -1,5 +1,5 @@
 from model.group import Group
-
+from selenium.webdriver.support.ui import Select
 
 class GroupHelper:
     def __init__(self, app):
@@ -108,3 +108,7 @@ class GroupHelper:
                 id = each_element.find_element_by_name("selected[]").get_attribute("value")
                 self.group_cache.append(Group(name = text, id = id))
         return list(self.group_cache)
+
+    def select_on_contact_page(self,group):
+        wd = self.app.wd
+        Select(wd.find_element_by_xpath("//select[@name='group']")).select_by_visible_text(group.name)
