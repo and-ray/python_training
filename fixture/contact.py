@@ -93,7 +93,7 @@ class ContactHelper:
                 first_name = each_element.find_element_by_xpath("td[3]").text
                 id = str(each_element.find_element_by_xpath("td/input").get_attribute("id"))
                 address = each_element.find_element_by_xpath("td[4]").text
-                all_emails = each_element.find_element_by_xpath("td[5]").text.replace(" ", "")
+                all_emails = each_element.find_element_by_xpath("td[5]").text #.replace(" ", "")
                 all_phones = each_element.find_element_by_xpath("td[6]").text.replace(" ", "")
                 self.contact_list_cache.append(Contact(last_name=last_name,
                                                        first_name=first_name,
