@@ -8,14 +8,13 @@ class ContactHelper:
         self.app = app
 
     def fill_first_contact(self, contact):
-        wd = self.app.wd
         self.change_field_value("firstname", contact.first_name)
         self.change_field_value("middlename", contact.middle_name)
         self.change_field_value("lastname", contact.last_name)
         self.change_field_value("home", contact.home_phone)
         self.change_field_value("mobile", contact.mobile_phone)
         self.change_field_value("work", contact.work_phone)
-        self.change_field_value("email", contact.email1)
+        self.change_field_value("email", contact.email)
         self.change_field_value("email2", contact.email2)
         self.change_field_value("email3", contact.email3)
         self.change_field_value("address", contact.address)
@@ -148,12 +147,12 @@ class ContactHelper:
         home_phone = " ".join(wd.find_element_by_name("home").get_attribute("value").split())
         mobile_phone = " ".join(wd.find_element_by_name("mobile").get_attribute("value").split())
         work_phone = " ".join(wd.find_element_by_name("work").get_attribute("value").split())
-        email1 = wd.find_element_by_name("email").get_attribute("value")
+        email = wd.find_element_by_name("email").get_attribute("value")
         email2 = wd.find_element_by_name("email2").get_attribute("value")
         email3 = wd.find_element_by_name("email3").get_attribute("value")
         address = wd.find_element_by_name("address").get_attribute("value")
         return(Contact(last_name=last_name, first_name=first_name, id=id, home_phone=home_phone,
                        mobile_phone=mobile_phone, work_phone=work_phone,
-                       email1=email1, email2=email2, email3=email3, address=address))
+                       email=email, email2=email2, email3=email3, address=address))
 
 

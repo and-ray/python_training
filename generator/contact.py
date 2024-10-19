@@ -40,14 +40,14 @@ def random_email (prefix, maxlen):
 
 testdata = [
 Contact(first_name=first_name, middle_name=middle_name, last_name=last_name,
-        home_phone=home_phone,work_phone=work_phone, mobile_phone=mobile_phone, email1=email1)
+        home_phone=home_phone,work_phone=work_phone, mobile_phone=mobile_phone, email=email)
     for first_name in ["", random_string("first_name", 10)]
     for middle_name in [random_string("middle_name", 20)]
     for last_name in ["", random_string("last_name", 20)]
     for home_phone in [random_digits("home_phone", 20)]
     for work_phone in [random_digits("work_phone", 20)]
     for mobile_phone in [random_digits("mobile_phone", 20)]
-    for email1 in [random_email("email1", 10)]
+    for email in [random_email("email", 10)]
 ]
 
 
