@@ -28,7 +28,7 @@ def test_delete_contact_from_group(app, db, json_contacts, check_ui):
     app.contact.create_with_group(new_contact, group)
     new_contact.id = list(filter(lambda x: (x.first_name == new_contact.first_name
                                             and x.last_name == new_contact.last_name
-                                            and x.email1 == new_contact.email1), db.get_contact_list()))[0].id
+                                            and x.email == new_contact.email), db.get_contact_list()))[0].id
 
     #удаляю контакт из группы
     app.group.select_on_contact_page(group)

@@ -23,7 +23,7 @@ class ORMFixture:
         home_phone = Optional(str, column='home')
         mobile_phone = Optional(str, column='mobile')
         work_phone = Optional(str, column='work')
-        email1 = Optional(str, column='email')
+        email = Optional(str, column='email')
         groups = Set(lambda:  ORMFixture.ORMGroup, table="address_in_groups", column='group_id', reverse='contacts', lazy=True)
 
     def __init__(self, host, name, user, password):
@@ -43,7 +43,7 @@ class ORMFixture:
         def convert(contact):
             return Contact(id=str(contact.id), first_name=contact.firstname, last_name=contact.lastname,
                            home_phone=contact.home_phone, mobile_phone=contact.mobile_phone, work_phone=contact.work_phone,
-                           email1=contact.email1
+                           email=contact.email
                            )
         return list(map(convert, contacts))
 
