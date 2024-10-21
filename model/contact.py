@@ -30,7 +30,10 @@ class Contact:
                     )
 
     def __eq__(self, other):
-        return (self.id is None or other.id is None or self.id == other.id) and self.first_name == other.first_name and self.last_name == other.last_name
+        return ((self.id is None or other.id is None or self.id == other.id) and self.first_name == other.first_name
+        and self.last_name == other.last_name and self.all_emails_from_home_page == other.all_emails_from_home_page
+        and self.all_phones_from_home_page == other.all_phones_from_home_page)
+
 
     def id_or_max(self):
         if self.id:

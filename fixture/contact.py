@@ -88,7 +88,7 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         # select
-        wd.find_elements(By.XPATH, "//img[@title='Edit']")[index].click()
+        wd.find_element(By.XPATH, "//a[@href='edit.php?id="+contact.id+"']/img[@title='Edit']").click()
         #edit
         self.fill_first_contact(contact)
         wd.find_element_by_name("update").click()
@@ -173,3 +173,17 @@ class ContactHelper:
     def delete_contact_from_group(self):
         wd = self.app.wd
         wd.find_element_by_name("remove").click()
+
+def clear_phone(phone):
+    return re.sub("[() -]","", phone)
+
+def  merge_phones_like_on_home_page(contact):
+    return "\n".join(filter(lambda x: x != "", map(lambda x: clear_phone(x),
+                                                   filter(lambda x: x is not None,
+                                                          [contact.home_phone,
+                                                           contact.mobile_phone,
+                                                           contact.work_phone])))).replace(" ", "")
+
+
+def merge_emails_like_on_home_page(contact):
+    return "\n".join(filter(lambda x: x != "",  filter(lambda x: x is not None,[contact.email, contact.email2, contact.email3])))

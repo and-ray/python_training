@@ -6,8 +6,8 @@ def test_modify_contact_by_index(app, db, check_ui):
     if len(db.get_contact_list()) == 0:
         app.contact.create(Contact(first_name="Contact_created_to_be_modified"))
     old_contact_list = db.get_contact_list()
-    index = randrange(len(old_contact_list))
-    contact_to_modify = Contact("contactEdited", "mnameEdited", "lnameEdited", "1234567890", "aEdited@ya.ru")
+    index = randrange(len(old_contact_list))#0\1
+    contact_to_modify = Contact("contactEdited2", "mnameEdited2", "lnameEdited2", work_phone="1234567890", address ="Earth 3d", email="alkjkjkjk@ya.ru")
     contact_to_modify.id = old_contact_list[index].id
     app.contact.modify_by_index(contact_to_modify, index)
     new_contact_list = db.get_contact_list()

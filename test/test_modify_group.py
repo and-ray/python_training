@@ -7,8 +7,8 @@ def test_modify_group_by_index(app, db, check_ui):
         app.group.create(Group(name = "Group_created_to_be_modified"))
     old_group_list = db.get_group_list()
     index = randrange(len(old_group_list))
-    group_to_modify = Group(name="nameEdited2", header="headerEdited", footer="footerEdited")
-    group_to_modify.id = old_group_list[index].id
+    group_to_modify = Group(name="nameEdited22222", header="headerEdited22222", footer="footerEdited22222")
+    group_to_modify.id = old_group_list[index].id #эту строку можно засунуть в следующий метод,   чтобы индексом пользоваться, а не айдишником по индексу
     app.group.modify_by_index(group_to_modify, index)
     new_group_list = db.get_group_list()
     assert len(old_group_list) == len(new_group_list)
