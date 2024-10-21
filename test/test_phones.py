@@ -24,7 +24,7 @@ def  merge_phones_like_on_home_page(contact):
                                                            contact.work_phone])))).replace(" ", "")
 
 def merge_emails_like_on_home_page(contact):
-    return "".join(  [contact.email, contact.email2, contact.email3])
+    return "/n".join(filter(lambda x: x != "",  [contact.email, contact.email2, contact.email3]))
 
 def test_contacts_on_main_and_edit_page(app):
     contacts_from_home_page = app.contact.get_contact_list()
