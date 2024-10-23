@@ -4,7 +4,7 @@ from model.contact import Contact
 from datetime import datetime
 
 
-def test_delete_contact_by_index(app, db,  check_ui):
+def test_delete_contact(app, db,  check_ui):
     if len(db.get_contact_list()) == 0:
         app.contact.create(Contact(first_name = "Contact_created_to_be_deleted"))
     old_contact_list = db.get_contact_list()

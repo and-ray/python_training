@@ -8,7 +8,7 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def fill_first_contact(self, contact):
+    def edit_contact(self, contact):
         self.change_field_value("firstname", contact.first_name)
         self.change_field_value("middlename", contact.middle_name)
         self.change_field_value("lastname", contact.last_name)
@@ -22,7 +22,7 @@ class ContactHelper:
 
     def fill_first_contact_with_group(self, contact, group):
         wd = self.app.wd
-        self.fill_first_contact(contact)
+        self.edit_contact(contact)
         Select(wd.find_element_by_name("new_group")).select_by_visible_text(group.name)
 
     def change_field_value(self, field_name, text):
@@ -40,7 +40,7 @@ class ContactHelper:
     def create(self, contact):
         wd = self.app.wd
         self.open_contact_creation_page()
-        self.fill_first_contact(contact)
+        self.edit_contact(contact)
         wd.find_element_by_name("submit").click()
         self.return_to_home_page()
         self.contact_list_cache = None
@@ -73,13 +73,15 @@ class ContactHelper:
     def delete_contact_by_id(self, id):
         wd = self.app.wd
         self.return_to_home_page()
-        # select
-        wd.find_element_by_css_selector("input[value='%s']" %id).click()
+        self.select_contact_by_id(id)
         # exterminate
         wd.find_element(By.XPATH, "//input[@value='Delete']").click()
         self.return_to_home_page()
         self.contact_list_cache = None
 
+    def select_contact_by_id(self, id):
+        wd = self.app.wd
+        wd.find_element(By.XPATH, "//a[@href='edit.php?id=" + id + "']/img[@title='Edit']").click()
 
     def delete_first_contact(self):
         self.delete_contact_by_index(0)
@@ -88,9 +90,18 @@ class ContactHelper:
         wd = self.app.wd
         self.return_to_home_page()
         # select
-        wd.find_element(By.XPATH, "//a[@href='edit.php?id="+contact.id+"']/img[@title='Edit']").click()
+        wd.find_elements(By.XPATH, "//img[@title='Edit']")[index+1].click()
         #edit
-        self.fill_first_contact(contact)
+        self.edit_contact(contact)
+        wd.find_element_by_name("update").click()
+        self.return_to_home_page()
+        self.contact_list_cache = None
+
+    def modify_by_id(self, modify_data, id):
+        wd = self.app.wd
+        self.return_to_home_page()
+        self.select_contact_by_id(id)
+        self.edit_contact(modify_data)
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
         self.contact_list_cache = None
