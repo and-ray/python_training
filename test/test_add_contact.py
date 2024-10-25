@@ -2,6 +2,7 @@
 from model.contact import Contact
 from model.group import Group
 from datetime import datetime
+import random
 
 def test_add_contact(app, db, json_contacts, check_ui):
     new_contact = json_contacts
@@ -15,22 +16,17 @@ def test_add_contact(app, db, json_contacts, check_ui):
                                                                          key=Contact.id_or_max)
 
 def test_add_contact_to_group(app, db, json_contacts, check_ui):
-   # if len(db.get_group_list()) == 0:
-    #для обеспечения уникальности имени группы предусловие убрала, т.к. в других тестах создаются группы с одинаковыми названиями.
-    group = Group(name = "Group_created"+str(datetime.now().time()), header="lalala", footer="lalala")
+    group = Group(name = "Group_created_"+str(datetime.now().time()), header="header lalala", footer="footer lalala")
     app.group.create(group)
-    groups = db.get_group_list()
-    group.id = list(filter(lambda x: x.name == group.name, groups))[0].id
-
-    #лист контактов до создания контакта.
+    group.id = app.group.get_id(group.name)
     new_contact = json_contacts
-
-    #создаем контакт, включенный у группу, через UI
-    app.contact.create_with_group(new_contact, group)
-
-    # вытаскиваю из БД контактs с нужной группой
-    new_contact_fom_db = db.get_contacts_in_group(group)[0]
+    new_contact.first_name = new_contact.first_name + str(datetime.now().time())
+    app.contact.create(new_contact)
+    new_contact.id = app.contact.get_id(new_contact.first_name)
+    app.contact.add_contact_to_group(new_contact, group.name)
+    # вытаскиваю из БД контакты с нужной группой
+    new_contacts_fom_db = db.get_contacts_in_group(group)
 
     # проверяю данные исходные с тем, что получено из БД по контакту.
-    assert new_contact == new_contact_fom_db
+    assert new_contact in new_contacts_fom_db
 

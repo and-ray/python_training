@@ -1,3 +1,5 @@
+from pickle import EMPTY_LIST
+
 from pony.orm import *
 #from datetime import datetime
 from pymysql.converters import decoders
@@ -56,12 +58,15 @@ class ORMFixture:
     @db_session
     def get_contacts_in_group(self, group):
         orm_groups = self.get_first_group_fom_db(group)
-        return self.convert_contacts_to_model(orm_groups.contacts)
+        if orm_groups!=0:
+            return self.convert_contacts_to_model(orm_groups.contacts)
+        else: return 0
 
     def get_first_group_fom_db(self, group):
-        temp_group = group
-        orm_groups = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))[0]
-        return orm_groups
+        orm_groups = list(select(g for g in ORMFixture.ORMGroup if g.id == group.id))
+        if len(orm_groups)==0:
+            return 0
+        else: return orm_groups[0]
 
     @db_session
     def get_contacts_not_in_group(self, group):

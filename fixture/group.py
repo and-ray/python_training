@@ -123,3 +123,7 @@ class GroupHelper:
     def select_on_contact_page(self,group):
         wd = self.app.wd
         Select(wd.find_element_by_xpath("//select[@name='group']")).select_by_visible_text(group.name)
+
+    def get_id(self, group_name):
+        wd = self.app.wd
+        return wd.find_element_by_xpath("//input[contains(@title,'%s')]" % group_name).get_attribute("value")

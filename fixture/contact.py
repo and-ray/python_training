@@ -185,6 +185,18 @@ class ContactHelper:
         wd = self.app.wd
         wd.find_element_by_name("remove").click()
 
+    def add_contact_to_group(self, contact, group_name):
+        wd = self.app.wd
+        wd.find_element_by_xpath("//input[contains(@title,'%s')]" %contact.first_name).click()
+        Select(wd.find_element_by_name("to_group")).select_by_visible_text(group_name)
+        wd.find_element_by_xpath("//input[@name='add']").click()
+
+    def get_id(self, first_name):
+        wd = self.app.wd
+        return wd.find_element_by_xpath("//input[contains(@title,'%s')]" % first_name).get_attribute("value")
+
+
+
 def clear_phone(phone):
     return re.sub("[() -]","", phone)
 
