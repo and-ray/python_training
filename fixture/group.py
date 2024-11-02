@@ -1,3 +1,5 @@
+from selenium.webdriver.common.by import By
+
 from model.group import Group
 from selenium.webdriver.support.ui import Select
 
@@ -9,10 +11,10 @@ class GroupHelper:
         wd = self.app.wd
         self.open_group_page()
         # init group creation
-        wd.find_element_by_name("new").click()
+        wd.find_element(By.NAME, "new").click()
         self.fill_group_form(group)
         # submit group creation
-        wd.find_element_by_name("submit").click()
+        wd.find_element(By.NAME, "submit").click()
         # go back  to groups
         self.return_to_group_page()
         self.group_cache = None
@@ -25,19 +27,19 @@ class GroupHelper:
     def change_field_value(self, field_name, text):
         wd = self.app.wd
         if text is not None:
-            wd.find_element_by_name(field_name).click()
-            wd.find_element_by_name(field_name).clear()
-            wd.find_element_by_name(field_name).send_keys(text)
+            wd.find_element(By.NAME, field_name).click()
+            wd.find_element(By.NAME, field_name).clear()
+            wd.find_element(By.NAME, field_name).send_keys(text)
 
     def open_group_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) >0):
-            wd.find_element_by_link_text("groups").click()
+        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements(By.NAME, "new")) >0):
+            wd.find_element(By.LINK_TEXT, "groups").click()
 
     def return_to_group_page(self):
         wd = self.app.wd
-        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements_by_name("new")) > 0):
-            wd.find_element_by_link_text("groups").click()
+        if not (wd.current_url.endswith("/group.php") and len(wd.find_elements(By.NAME, "new")) > 0):
+            wd.find_element(By.LINK_TEXT,"groups").click()
 
     def select_group_by_index(self, index):
         wd = self.app.wd
